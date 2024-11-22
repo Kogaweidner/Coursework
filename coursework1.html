@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>After School Class</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="products.js"></script>
+  <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+  <div id="app">
+    <header>
+      <h1 v-text="sitename"></h1>
+    </header>
+
+    <div class="main">
+      <main>
+        <div class="product-grid" v-if="showProduct">
+          <div v-for="product in filteredProducts" :key="product.id" class="box">
+            <figure>
+              <img :src="product.image" alt="Product Image">
+            </figure>
+            <h2 v-text="product.title"></h2>
+            <p v-html="product.description"></p>
+            <p><strong>Location:</strong> {{ product.location }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <p>Available Seats: {{ product.availableInventory - cartCount(product.id) }}</p>
+            <button v-on:click="addToCart(product)" v-if="canAddToCart(product)">Add to cart</button>
+            <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
+            <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
+              Only {{ product.availableInventory - cartCount(product.id) }} left!
+            </span>
+            <span v-else>Buy now!</span>
+            <div>
+              <span v-for='n in product.rating'>★</span>
+              <span v-for='n in 5 - product.rating'>☆</span>
+            </div>
+          </div>
+        </div>
+
+        <div v-else>
+          <h2>Checkout</h2>
+          <p><strong>First Name:</strong> <input v-model.trim="order.firstName" /></p>
+          <p><strong>Last Name:</strong> <input v-model="order.lastName" /></p>
+          <p><strong>Address:</strong> <input v-model="order.address" /></p>
+          <p><strong>City:</strong> <input v-model="order.city" /></p>
+          <p><strong>State:</strong>
+            <select v-model="order.state">
+              <option disabled value="">State</option>
+              <option v-for="(state, key) in states" :value="state">{{ key }}</option>
+            </select>
+          </p>
+          <p><strong>Zip/Postal Code:</strong> <input v-model.number="order.zip" type="number" /></p>
+          <p>
+            <input type="checkbox" id="gift" value="true" v-model="order.gift" :true-value="order.sendGift"
+              :false-value="order.dontSendGift">
+            <label for="gift">Ship As Gift?</label>
+          </p>
+          <p>
+            <input type="radio" id="home" value="Home" v-model="order.method">
+            <label for="home">Home</label>
+            <input type="radio" id="business" value="Business" v-model="order.method">
+            <label for="business">Business</label>
+            <input type="radio" id="party" value="Party" v-model="order.method">
+            <label for="party">Party</label>
+          </p>
+          <h2>Order Information</h2>
+          <p>Gift? {{ order.gift }}</p>
+          <p>Method: {{ order.method }}</p>
+          <p>First Name: {{ order.firstName }}</p>
+          <p>Last Name: {{ order.lastName }}</p>
+          <p>Address: {{ order.address }}</p>
+          <p>City: {{ order.city }}</p>
+          <p>State: {{ order.state }}</p>
+          <p>Zip: {{ order.zip }}</p>
+          <button v-on:click="submitForm">Place Order</button>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      FOOTER
+    </footer>
+  </div>
+
+  <script type="text/javascript">
+    var webstore = new Vue({
+      el: '#app',
+      data: {
+        showProduct: true,
+        order: {
+          firstName: '',
+          lastName: '',
+          address: '',
+          city: '',
+          zip: '',
+          state: '',
+          method: 'Home',
+          sendGift: 'Send as a gift',
+          dontSendGift: 'Do not send as a gift',
+          gift: false // Added this line to ensure gift has a defined state
+        },
+        sitename: 'After School Class',
+        products: products,
+        cart: [],
+        states: {
+          AL: 'Alabama',
+          AR: 'Arizona',
+          CA: 'California',
+          NV: 'Nevada'
+        },
+      },
+      methods: {
+        addToCart(product) {
+          this.cart.push(product.id);
+        },
+        showCheckout() {
+          this.showProduct = !this.showProduct;
+        },
+        submitForm() {
+          alert('Order submitted!');
+        },
+        canAddToCart(product) {
+          return product.availableInventory > this.cartCount(product.id);
+        },
+        cartCount(id) {
+          return this.cart.filter(cartId => cartId === id).length;
+        }
+      },
+      computed: {
+        filteredProducts() {
+          return this.products; // Return all products without sorting
+        },
+      }
+    });
+  </script>
+
+</body>
+
+</html>
