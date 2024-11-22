@@ -1,0 +1,88 @@
+* {
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+body {
+  height: 95vh;
+  background: #d000ff;
+  font-family: sans-serif;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: #d000ff;
+  padding: 2em 0;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+}
+
+.product-grid, .ifElseStatement {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Flexible columns based on min width */
+  gap: 20px;
+}
+
+.box , .ifElseStatement {
+  padding: 1em;
+  background-color: #1e272e;
+  border-radius: 10px;
+}
+
+.box img {
+  width: 100%; /* Scales image to fill the box width */
+  max-width: 100%; /* Ensures the image does not overflow */
+  height: auto; /* Maintains aspect ratio */
+}
+
+.left {
+  background: #7700ff;
+  padding: 3em 0;
+  flex: 1  1 100px;
+}
+
+main , .ifElseStatement {
+  background: #3c40c6;
+  padding: 3em 0;
+  flex: 5 5 150px;
+}
+
+.right {
+  background-color: #3c40c6;
+  padding: 3em 0;
+  flex: 1 1 100px;
+}
+
+footer {
+  background: #3c40c6;
+  padding: 3em 0;
+}
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+@media all and (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr); /* Three columns on medium screens */
+  }
+}
+
+@media all and (max-width: 550px) {
+  .main {
+    flex-direction: column;
+  }
+  .product-grid {
+    grid-template-columns: 1fr; /* One column on small screens */
+  }
+  main {
+    padding: 5em 0;
+  }
+}
